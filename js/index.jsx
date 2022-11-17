@@ -11,20 +11,17 @@ const elExpenseInput = document.querySelector(".expense_input");
 const elAmountInput = document.querySelector(".amount_input");
 const elExpensesList = document.querySelector(".expenses__list");
 
-const budgetStorage = JSON.parse(window.localStorage.getItem("budget"));
-let budget = budgetStorage || [];
-let calcBudget = budget.reduce((acc, item) => acc + item, 0);
-elBudget.textContent = calcBudget;
-
-const expensesStorage = JSON.parse(window.localStorage.getItem("expenses"));
-let expenses = expensesStorage || [];
-const calcExpenses = expenses.reduce((acc, item) => acc + item, 0);
-elExpenses.textContent = calcExpenses;
+let budget = [];
+let expenses = [];
 
 let balanse = [] || 0;
 
 const expensesStroge = JSON.parse(window.localStorage.getItem("newExpenses"));
 const newExpenses = expensesStroge || [];
+
+elBalance.textContent =
+  budget.reduce((acc, item) => acc + item, 0) -
+  expenses.reduce((acc, item) => acc + item, 0);
 
 elBudgetForm.addEventListener("submit", function (evt) {
   evt.preventDefault();
@@ -38,8 +35,7 @@ elBudgetForm.addEventListener("submit", function (evt) {
 
   let calcBalance =
     calcBudget -
-    expenses.reduce((acc, item) => acc + item, 0) +
-    balanse.reduce((acc, item) => acc + item, 0);
+    expenses.reduce((acc, item) => acc + item, 0)
   elBalance.textContent = calcBalance;
 
   elBudgetFormInput.value = null;
@@ -121,12 +117,8 @@ elExpensesList.addEventListener("click", function (evt) {
 
     window.localStorage.setItem("newExpenses", JSON.stringify(newExpenses));
 
-    expenses.splice(findItem.amount, 1)
+    expenses.splice(findItem.amount, 1);
     window.localStorage.setItem("expenses", JSON.stringify(expenses));
-    // const qqq = newExpenses.find(item => item === deleteId)
-    // const expensesAmount = expenses.findIndex(item => item === deleteId)
-
-    console.log(expenses);
 
     if (newExpenses.length === 0) {
       window.localStorage.removeItem("newExpenses");
@@ -137,9 +129,7 @@ elExpensesList.addEventListener("click", function (evt) {
     elExpenses.textContent = calcExpenses;
 
     let calcBalance =
-    calcBudget -
-    expenses.reduce((acc, item) => acc + item, 0) +
-    balanse.reduce((acc, item) => acc + item, 0);
+      budget.reduce((acc, item) => acc + item, 0) - calcExpenses;
     elBalance.textContent = calcBalance;
 
     elExpensesList.innerHTML = null;
